@@ -148,7 +148,7 @@ class LearningSession(BaseModel):
     user_id: str
     surah_number: int = Field(ge=1, le=114)
     ayah_number: int = Field(ge=1)
-    session_type: str = Field(regex=r'^(reading|memorization|translation|recitation)$')
+    session_type: str = Field(pattern=r'^(reading|memorization|translation|recitation)$')
     duration_minutes: int = Field(ge=1, le=300)
     experience_gained: int = Field(ge=0)
     created_at: datetime = Field(default_factory=datetime.utcnow)
@@ -156,7 +156,7 @@ class LearningSession(BaseModel):
 class LearningSessionCreate(BaseModel):
     surah_number: int = Field(ge=1, le=114)
     ayah_number: int = Field(ge=1)
-    session_type: str = Field(regex=r'^(reading|memorization|translation|recitation)$')
+    session_type: str = Field(pattern=r'^(reading|memorization|translation|recitation)$')
     duration_minutes: int = Field(ge=1, le=300)
 
 class UserProgressCreate(BaseModel):
