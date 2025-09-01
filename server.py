@@ -30,7 +30,6 @@ client = AsyncIOMotorClient(
     serverSelectionTimeoutMS=5000,
     tls=True,
     tlsAllowInvalidCertificates=True,
-    tlsInsecure=True,
     connectTimeoutMS=10000,
     socketTimeoutMS=10000
 )
