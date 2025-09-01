@@ -597,6 +597,7 @@ async def get_leaderboard(limit: int = 10):
         logging.error(f"Error getting leaderboard: {e}")
         raise HTTPException(status_code=500, detail="Failed to fetch leaderboard")
         @api_router.get("/api/ping")
+        
 async def ping():
     """Simple ping endpoint that doesn't require database"""
     return {
