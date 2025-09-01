@@ -23,7 +23,17 @@ load_dotenv(ROOT_DIR / '.env')
 
 # MongoDB connection with connection pooling
 mongo_url = os.environ['MONGO_URL']
-client = AsyncIOMotorClient(mongo_url, maxPoolSize=50, minPoolSize=10, serverSelectionTimeoutMS=5000)
+client = AsyncIOMotorClient(
+    mongo_url, 
+    maxPoolSize=50, 
+    minPoolSize=10, 
+    serverSelectionTimeoutMS=5000,
+    tls=True,
+    tlsAllowInvalidCertificates=True,
+    tlsInsecure=True,
+    connectTimeoutMS=10000,
+    socketTimeoutMS=10000
+)
 db = client[os.environ['DB_NAME']]
 
 # Create indexes for better performance
