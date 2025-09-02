@@ -326,44 +326,36 @@ async def fetch_quran_verses(chapter_id: int, per_page: int = 50):
     return []
 
 async def fetch_audio_url(chapter_id: int, verse_number: int, reciter: str = "1"):
-    """Fetch audio URL for a specific verse with better error handling"""
+    """Fetch audio URL for a specific verse with working audio source"""
     if not (1 <= chapter_id <= 114):
         return None
     
     try:
-        async with httpx.AsyncClient(timeout=10.0) as client:
-            # Convert reciter string to ID if needed
-            reciter_id = reciter
-            if reciter.startswith("ar."):
-                # Map old string IDs to numeric IDs
-                reciter_map = {
-                    "ar.alafasy": "7",  # Mishary Rashid Alafasy
-                    "ar.husary": "1",   # AbdulBaset AbdulSamad (Mujawwad)
-                    "ar.minshawi": "2", # AbdulBaset AbdulSamad (Murattal)
-                    "ar.muhammed": "3", # Abdur-Rahman as-Sudais
-                    "ar.walk": "5"      # Hani ar-Rifai
-                }
-                reciter_id = reciter_map.get(reciter, "1")
-            
-            # Try the verse-specific audio endpoint
-            response = await client.get(
-                f"https://api.quran.com/api/v4/recitations/{reciter_id}/by_chapter/{chapter_id}"
-            )
-            if response.status_code == 200:
-                data = response.json()
-                if "audio_files" in data and len(data["audio_files"]) > 0:
-                    # Find the specific verse audio
-                    for audio_file in data["audio_files"]:
-                        if audio_file.get("verse_key") == f"{chapter_id}:{verse_number}":
-                            return f"https://verses.quran.com/{audio_file.get('url')}"
-                    # If specific verse not found, return the first audio file
-                    return f"https://verses.quran.com/{data['audio_files'][0].get('url')}"
+        # Use EveryAyah.com - a reliable working audio source
+        reciter_map = {
+            "1": "AbdulBasit_AbdulSamad_Mujawwad_128kbps",
+            "7": "Mishary_Rashid_Alafasy_128kbps", 
+            "2": "AbdulBasit_AbdulSamad_Murattal_128kbps",
+            "3": "Abdur-Rahman_as-Sudais_192kbps",
+            "5": "Hani_Rifai_192kbps"
+        }
+        
+        reciter_name = reciter_map.get(reciter, "AbdulBasit_AbdulSamad_Mujawwad_128kbps")
+        
+        # Format chapter and verse with leading zeros
+        chapter_str = str(chapter_id).zfill(3)
+        verse_str = str(verse_number).zfill(3)
+        
+        # Use EveryAyah.com - reliable Quran audio source
+        audio_url = f"https://everyayah.com/data/{reciter_name}/{chapter_str}{verse_str}.mp3"
+        
+        return audio_url
+        
     except Exception as e:
         logging.error(f"Error fetching audio for chapter {chapter_id}, verse {verse_number}: {e}")
-    
-    return None
-
-# Routes with enhanced error handling
+        return None
+        
+    # Routes with enhanced error handling
 @api_router.post("/auth/register")
 async def register(user_data: UserCreate):
     """Register a new user with validation"""
