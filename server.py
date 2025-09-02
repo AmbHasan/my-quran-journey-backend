@@ -333,14 +333,14 @@ async def fetch_audio_url(chapter_id: int, verse_number: int, reciter: str = "1"
     try:
         # Use EveryAyah.com - a reliable working audio source
         reciter_map = {
-            "1": "AbdulBasit_AbdulSamad_Mujawwad_128kbps",
+            "1": "Abdul_Basit_Mujawwad_128kbps",
             "7": "Mishary_Rashid_Alafasy_128kbps", 
-            "2": "AbdulBasit_AbdulSamad_Murattal_128kbps",
+            "2": "Abdul_Basit_Murattal_128kbps",
             "3": "Abdur-Rahman_as-Sudais_192kbps",
             "5": "Hani_Rifai_192kbps"
         }
         
-        reciter_name = reciter_map.get(reciter, "AbdulBasit_AbdulSamad_Mujawwad_128kbps")
+        reciter_name = reciter_map.get(reciter, "Abdul_Basit__Mujawwad_128kbps")
         
         # Format chapter and verse with leading zeros
         chapter_str = str(chapter_id).zfill(3)
